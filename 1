@@ -1,0 +1,7 @@
+      invoke  active_record
+      remove    db/migrate/20201129214504_create_users.rb
+      create    db/migrate/20201129214702_create_users.rb
+   identical    app/models/user.rb
+      invoke    test_unit
+   identical      test/models/user_test.rb
+       force      test/fixtures/users.yml
