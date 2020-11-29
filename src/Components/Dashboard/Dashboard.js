@@ -5,7 +5,9 @@ import {CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, Ic
 import {MenuOutlined, ChevronLeft} from '@material-ui/icons';
 import {glistItems} from './ListItems/listItems';
 import InvestmentsG from './InvestmentsG/InvestmentsG'
+import BudgetG from './BudgetG/BudgetG'
 import PGraph from '../Portfolio/PGraph/PGraph';
+import BGraph from '../Budget/BGraph/BGraph'
 
 
 export default function Dashboard() {
@@ -61,21 +63,28 @@ export default function Dashboard() {
             <div className={classes.appBarSpacer} />
             <Container maxWidth="lg" className={classes.container}>
               <Grid container spacing={3}>
-                {/* Chart */}
-                <Grid item xs={12} md={8} lg={9}>
+                <Grid item xs={12} md={8} lg={8}>
                   <Paper className={fixedHeightPaper}>
                     <PGraph />
                   </Paper>
                 </Grid>
-                {/* Recent Deposits */}
-                <Grid item xs={12} md={4} lg={3}>
+                <Grid item xs={12} md={4} lg={4}>
                   <Paper className={fixedHeightPaper}>
                     <InvestmentsG />
                   </Paper>
                 </Grid>
-                {/* Recent Orders */}
                 <Grid item xs={12}>
                   <Paper className={classes.paper}>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
+                  <Paper className={fixedHeightPaper}>
+                    <BGraph />
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
+                  <Paper className={fixedHeightPaper}>
+                    <BudgetG />
                   </Paper>
                 </Grid>
               </Grid>
