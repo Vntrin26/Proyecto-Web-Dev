@@ -1,12 +1,49 @@
-import React from 'react';
+import React, {useState} from 'react';
+import axios from "axios";
 import {Button, CssBaseline, TextField, Grid, Typography, Container} from '@material-ui/core';
 import {AccountBalanceWallet, Email, Lock } from '@material-ui/icons';
 import useStyles from './AuthStyles'
 
 
-export default function SignIn() {
+export default function SignIn(props) {
   
+  const [datos, setDatos] = useState({
+    email: '',
+    password: '',
+    registrationErrors: '',
+  });
+
   const classes = useStyles();
+
+  const handleChange = (e) =>{
+    e.preventDefault();
+    setDatos({ ...datos, [e.target.name]: e.target.value})
+  };
+
+  const handleSubmit = (e) => {
+    const { email, password, password_confirmation } = datos;
+
+    axios
+      .post(
+        "http://localhost:3001/registrations",
+        {
+          user: {
+            email: email,
+            password: password,
+          }
+        },
+        { withCredentials: true }
+      )
+      .then(response => {
+        if (response.data.status === "created") {
+          props.handleSuccessfulAuth(response.data);
+        }
+      })
+      .catch(error => {
+        console.log("registration error", error);
+      });
+    e.preventDefault();
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -40,6 +77,8 @@ export default function SignIn() {
                   id="email"
                   label="Email Address"
                   name="email"
+                  value={datos.email}
+                  onChange={handleChange}
                   autoComplete="email"
                   autoFocus
                   />
@@ -54,6 +93,8 @@ export default function SignIn() {
                   fullWidth
                   name="password"
                   label="Password"
+                  value={datos.password}
+                  onChange={handleChange}
                   type="password"
                   id="password"
                   autoComplete="current-password"
@@ -61,10 +102,12 @@ export default function SignIn() {
                 </Grid>
                 <Grid item xs = '6'>
                   <Button
+                  onClick = {handleSubmit}
                   type="submit"
                   fullWidth
                   color="secondary"
                   className={classes.submit}
+                  onC
                   >
                   Register
                   </Button>
