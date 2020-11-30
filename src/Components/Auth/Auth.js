@@ -21,7 +21,7 @@ export default function SignIn(props) {
   };
 
   const handleSubmit = (e) => {
-    const { email, password, password_confirmation } = datos;
+    const { email, password} = datos;
 
     axios
       .post(
@@ -35,9 +35,7 @@ export default function SignIn(props) {
         { withCredentials: true }
       )
       .then(response => {
-        if (response.data.status === "created") {
-          props.handleSuccessfulAuth(response.data);
-        }
+        console.log("registration res", response);
       })
       .catch(error => {
         console.log("registration error", error);
