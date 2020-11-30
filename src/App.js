@@ -3,6 +3,7 @@ import useStyles from '../src/AppStyles';
 import {CloudWaveEffect} from 'react-background-animation'
 import Dashboard from './Components/Dashboard/Dashboard'
 import {BrowserRouter, Switch, Route} from "react-router-dom";
+import Budget from './Components/Budget/Budget'
 
 function App() {
   const classes = useStyles()
@@ -10,6 +11,7 @@ function App() {
     <div className='app'>
       <BrowserRouter>
         <Switch>
+          <Route exact path={'budget'} component = {Budget}/>
           <Route exact path={"/dashboard"} component={Dashboard} />
           <Route path='/auth' render={props =>
         <div>
