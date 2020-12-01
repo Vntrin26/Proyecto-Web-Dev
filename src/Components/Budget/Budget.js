@@ -143,7 +143,7 @@ export default function Budget() {
             <MenuOutlined />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Portfolio
+            Budget
               </Typography>
           <IconButton color="inherit">
           </IconButton>
