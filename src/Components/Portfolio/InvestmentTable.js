@@ -17,10 +17,10 @@ const InvestmentTable = ({id, description, amount, gain, type}) => {
     return (
 
     <tr >
-        <td>{desc}</td>
-        <td>{amt}</td>
-        <td>{gn}</td>
-        <td>{typ}</td>
+        <td><input value={desc}></input></td>
+        <td><input value={amt}></input></td>
+        <td><input value={gn}></input></td>
+        <td><input value={typ}></input></td>
      </tr>
     );
 
