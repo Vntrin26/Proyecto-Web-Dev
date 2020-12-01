@@ -13,7 +13,6 @@ export default function SignIn(props) {
   const [datos, setDatos] = useState({
     email: '',
     password: '',
-    password_confirmation: '',
     registrationErrors: '',
   });
 
