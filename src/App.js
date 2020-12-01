@@ -11,7 +11,7 @@ function App(props) {
   const classes = useStyles()
   const [loggedInStatus, setloggedInStatus] = useState("NOT_LOGGED_IN");
   const [user, setuser] = useState({});
-
+//
   const logged = (data) => {
       setloggedInStatus("LOGGED_IN");
       setuser(data);
