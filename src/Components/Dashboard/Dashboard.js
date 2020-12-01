@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import useStyles from './DashboardStyles.js';
-import {CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, IconButton, Badge, Container, Grid, Paper, Link} from '@material-ui/core';
+import {Button, CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, IconButton, Badge, Container, Grid, Paper, Link} from '@material-ui/core';
 import {MenuOutlined, ChevronLeft} from '@material-ui/icons';
 import GlistItems from './ListItems/listItems';
 import InvestmentsG from './InvestmentsG/InvestmentsG'
@@ -41,6 +41,11 @@ export default function Dashboard(props) {
               <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                 Dashboard
               </Typography>
+              <Button
+              className = {classes.button}
+              variant='contained'
+              color="danger"
+              >Log out</Button>
               <h5>Status: {props.loggedInStatus}</h5>
               <IconButton color="inherit">
               </IconButton>

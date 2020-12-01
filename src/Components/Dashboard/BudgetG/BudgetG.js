@@ -18,11 +18,6 @@ export default function BudgetG() {
       <Typography color="textSecondary" className={classes.depositContext}>
         if you continue saving $#### each month you will reach by 2022
       </Typography>
-      <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          Details
-        </Link>
-      </div>
     </React.Fragment>
   );
 }
