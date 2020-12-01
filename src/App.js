@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { data } from 'jquery';
 import Budget from './Components/Budget/Budget'
 import Portfolio from './Components/Portfolio/Portfolio';
+import ProtectedRoute from './Helpers/ProtectedRoute'
 
 function App(props) {
   const classes = useStyles()
@@ -17,6 +18,7 @@ function App(props) {
       setuser(data);
     }
   
+    //CHANGE ROUTE TO PROTECTEDROUTE TO PROTECT :V
   return (
     <div className='app'>
       <BrowserRouter>
@@ -24,9 +26,9 @@ function App(props) {
           <Route path={"/dashboard"} render={props => (
             <Dashboard loggedInStatus={loggedInStatus} />
           )} />
-          <Route exact path={'/budget'} component = {Budget}/>
-          <Route exact path={"/portfolio"} component={Portfolio} />
-          <Route path='/' render={props => ( 
+          <Route path={'/budget'} component = {Budget}/>
+          <Route path={"/portfolio"} component={Portfolio} />
+          <Route exact = {true} path='/' render={props => ( 
           <div>
             <Auth logged={logged} loggedInStatus={loggedInStatus} />
           </div>
