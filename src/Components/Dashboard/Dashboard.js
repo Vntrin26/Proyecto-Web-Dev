@@ -10,7 +10,7 @@ import PGraph from '../Portfolio/PGraph/PGraph';
 import BGraph from '../Budget/BGraph/BGraph'
 
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     const classes = useStyles();
     const [extend, setExtend] = React.useState(true);
     const handleDrawerExtend = () => {

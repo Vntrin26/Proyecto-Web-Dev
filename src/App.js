@@ -12,9 +12,9 @@ function App(props) {
   const [loggedInStatus, setloggedInStatus] = useState("NOT_LOGGED_IN");
   const [user, setuser] = useState({});
 
-  const logged = () => {
+  const logged = (data) => {
       setloggedInStatus("LOGGED_IN");
-      setuser("");
+      setuser(data);
     }
   
   return (
@@ -26,10 +26,10 @@ function App(props) {
           )} />
           <Route exact path={'/budget'} component = {Budget}/>
           <Route exact path={"/dashboard"} component={Dashboard} />
-          <Route path='/auth' render={props => ( 
+          <Route path='/' render={props => ( 
           <div>
             <CloudWaveEffect />
-            <Auth loggedInStatus={loggedInStatus} />
+            <Auth logged={logged} loggedInStatus={loggedInStatus} />
           </div>
           )} />
         </Switch>
