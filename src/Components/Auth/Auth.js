@@ -18,6 +18,7 @@ export default function SignIn(props) {
   });
 
   const handleSuccessfulAuth = (data) => {
+    props.logged(data);
     history.push("/dashboard");
   }
 

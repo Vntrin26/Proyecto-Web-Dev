@@ -11,9 +11,9 @@ function App() {
   const [loggedInStatus, setloggedInStatus] = useState("NOT_LOGGED_IN");
   const [user, setuser] = useState({});
 
-  const logged = () => {
+  const logged = (data) => {
       setloggedInStatus("LOGGED_IN");
-      setuser("");
+      setuser(data);
     }
   
   return (
@@ -26,7 +26,7 @@ function App() {
           <Route path='/' render={props => (
         <div>
           <CloudWaveEffect />
-          <Auth loggedInStatus={loggedInStatus} />
+          <Auth logged={logged} loggedInStatus={loggedInStatus} />
         </div>
           )} />
         </Switch>
