@@ -6,6 +6,7 @@ import {BrowserRouter, Switch, Route} from "react-router-dom";
 import { useState } from 'react';
 import { data } from 'jquery';
 import Budget from './Components/Budget/Budget'
+import Portfolio from './Components/Portfolio/Portfolio';
 
 function App(props) {
   const classes = useStyles()
@@ -25,7 +26,7 @@ function App(props) {
             <Dashboard loggedInStatus={loggedInStatus} />
           )} />
           <Route exact path={'/budget'} component = {Budget}/>
-          <Route exact path={"/dashboard"} component={Dashboard} />
+          <Route exact path={"/portfolio"} component={Portfolio} />
           <Route path='/' render={props => ( 
           <div>
             <CloudWaveEffect />

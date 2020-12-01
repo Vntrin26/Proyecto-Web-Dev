@@ -11,19 +11,21 @@ const GlistItems = () => {
   return( 
   <div>
     <ListItem button
-    onClick = {e => history.push('/budget')}>
+    onClick = {e => history.push('/dashboard')}>
       <ListItemIcon>
         <Dashboard />
       </ListItemIcon>
       <ListItemText primary="Dashboard"/>
     </ListItem>
-    <ListItem button>
+    <ListItem button
+    onClick = {e => history.push('/budget')}>
       <ListItemIcon>
         <Assessment />
       </ListItemIcon>
       <ListItemText primary="Budget" />
     </ListItem>
-    <ListItem button>
+    <ListItem button
+    onClick = {e => history.push('/portfolio')}>
       <ListItemIcon>
         <MonetizationOn />
       </ListItemIcon>
