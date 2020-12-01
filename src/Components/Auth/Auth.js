@@ -3,16 +3,23 @@ import axios from "axios";
 import {Button, CssBaseline, TextField, Grid, Typography, Container} from '@material-ui/core';
 import {AccountBalanceWallet, Email, Lock } from '@material-ui/icons';
 import useStyles from './AuthStyles'
+import { useHistory } from 'react-router-dom';
 
 
 export default function SignIn(props) {
-  
+
+  let history = useHistory();
+
   const [datos, setDatos] = useState({
     email: '',
     password: '',
     password_confirmation: '',
     registrationErrors: '',
   });
+
+  const handleSuccessfulAuth = (data) => {
+    history.push("/dashboard");
+  }
 
   const classes = useStyles();
 
@@ -36,7 +43,9 @@ export default function SignIn(props) {
         { withCredentials: true }
       )
       .then(response => {
-        console.log("registration res", response);
+        if (response.data.status === 'created') {
+        handleSuccessfulAuth(response.data);
+        }
       })
       .catch(error => {
         console.log("registration error", error);
@@ -58,6 +67,7 @@ export default function SignIn(props) {
             <Typography component="h1" variant="h5">
               Money Desk
             </Typography>
+            <h5>Status: {props.loggedInStatus}</h5>
           </Grid>
           <Grid item xs = '3'>
           </Grid>

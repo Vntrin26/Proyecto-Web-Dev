@@ -10,7 +10,7 @@ import PGraph from '../Portfolio/PGraph/PGraph';
 import BGraph from '../Budget/BGraph/BGraph'
 
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     const classes = useStyles();
     const [extend, setExtend] = React.useState(true);
     const handleDrawerExtend = () => {
@@ -39,6 +39,7 @@ export default function Dashboard() {
               <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                 Dashboard
               </Typography>
+              <h5>Status: {props.loggedInStatus}</h5>
               <IconButton color="inherit">
               </IconButton>
             </Toolbar>
