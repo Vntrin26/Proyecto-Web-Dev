@@ -11,7 +11,7 @@ function App() {
     <div className='app'>
       <BrowserRouter>
         <Switch>
-          <Route exact path={'budget'} component = {Budget}/>
+          <Route exact path={'/budget'} component = {Budget}/>
           <Route exact path={"/dashboard"} component={Dashboard} />
           <Route path='/auth' render={props =>
         <div>
