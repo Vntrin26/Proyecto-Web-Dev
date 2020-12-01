@@ -79,6 +79,9 @@ const useStyles = makeStyles((theme) => ({
       fixedHeight: {
         height: 240,
       },
+      button:{
+        margin:theme.spacing(1)
+      }
     }));
 
 export default useStyles;
