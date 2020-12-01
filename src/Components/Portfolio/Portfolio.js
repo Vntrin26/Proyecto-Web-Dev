@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import useStyles from '../Dashboard/DashboardStyles.js';
-import { CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, IconButton, Badge, Container, Grid, Paper, Link } from '@material-ui/core';
+import { CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, IconButton, Badge, Container, Grid, Paper, Link, Button, TextField} from '@material-ui/core';
 import { MenuOutlined, ChevronLeft } from '@material-ui/icons';
 import { glistItems } from '../Dashboard/ListItems/listItems';
 import InvestmentsG from '../Dashboard/InvestmentsG/InvestmentsG'
@@ -85,7 +85,7 @@ export default function Portfolio() {
               <Paper className={classes.paper}>
               </Paper>
             </Grid>
-            <Grid item xs={12} md={12} lg={12}>
+            <Grid item xs={12} md={6} lg={6}>
               <Paper className={fixedHeightPaper}>
                 <table id='Portfolio'>
                   <tbody>
@@ -106,8 +106,57 @@ export default function Portfolio() {
 
               </Paper>
             </Grid>
-
-
+            <Grid container item xs={12} md={6} lg={6} spacing={1}>
+                <Grid item xs = {3}>
+                  <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="investment"
+                  label="description"
+                  id="investment"
+                  />
+                </Grid>
+                <Grid item xs = {3}>
+                  <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="investment"
+                  label="category"
+                  id="investment"
+                  />
+                </Grid>
+                <Grid item xs = {3}>
+                  <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="investment"
+                  label="quantity"
+                  id="investment"
+                  />
+                </Grid>
+                <Grid item xs = {3}>
+                  <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="investment"
+                  label="yield"
+                  id="investment"
+                  />
+                </Grid>
+                <Grid item xs = {6}>
+                  <Button
+                  fullWidth
+                  variant='contained'
+                  color= 'secondary'
+                  >
+                    Add Investment
+                  </Button>
+                </Grid>
+            </Grid>
           </Grid>
           <Box pt={4}>
           </Box>

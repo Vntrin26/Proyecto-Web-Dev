@@ -12,10 +12,10 @@ function App() {
     <div className='app'>
       <BrowserRouter>
         <Switch>
-          <Route exact path={'budget'} component = {Budget}/>
+          <Route exact path={'/budget'} component = {Budget}/>
           <Route exact path={"/dashboard"} component={Dashboard} />
           <Route exact path={"/portfolio"} component={Portfolio} />
-          <Route path='/auth' render={props =>
+          <Route path='/' render={props =>
         <div>
           <CloudWaveEffect />
           <Auth />
