@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import useStyles from '../Dashboard/DashboardStyles.js';
 import { ListItem, Dialog, CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, IconButton, Badge, Container, Grid, Paper, Link, Button, TextField, DialogTitle} from '@material-ui/core';
 import { MenuOutlined, ChevronLeft } from '@material-ui/icons';
-import { glistItems } from '../Dashboard/ListItems/listItems';
+import GlistItems from '../Dashboard/ListItems/listItems';
 import InvestmentsG from '../Dashboard/InvestmentsG/InvestmentsG'
 import PGraph from './PGraph/PGraph';
 
@@ -151,7 +151,7 @@ export default function Portfolio() {
           </IconButton>
         </div>
         <Divider />
-        <List>{glistItems}</List>
+        <List><GlistItems/></List>
         <Divider />
       </Drawer>
       <main className={classes.content}>

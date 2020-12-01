@@ -3,14 +3,14 @@ import clsx from 'clsx';
 import useStyles from './DashboardStyles.js';
 import {CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, IconButton, Badge, Container, Grid, Paper, Link} from '@material-ui/core';
 import {MenuOutlined, ChevronLeft} from '@material-ui/icons';
-import {glistItems} from './ListItems/listItems';
+import GlistItems from './ListItems/listItems';
 import InvestmentsG from './InvestmentsG/InvestmentsG'
 import BudgetG from './BudgetG/BudgetG'
 import PGraph from '../Portfolio/PGraph/PGraph';
 import BGraph from '../Budget/BGraph/BGraph'
 
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     const classes = useStyles();
     const [extend, setExtend] = React.useState(true);
     const handleDrawerExtend = () => {
@@ -21,6 +21,8 @@ export default function Dashboard() {
     };
     //combination of both styles
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+
 
     return (
         <div className={classes.root}>
@@ -39,6 +41,7 @@ export default function Dashboard() {
               <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                 Dashboard
               </Typography>
+              <h5>Status: {props.loggedInStatus}</h5>
               <IconButton color="inherit">
               </IconButton>
             </Toolbar>
@@ -56,7 +59,9 @@ export default function Dashboard() {
               </IconButton>
             </div>
             <Divider />
-            <List>{glistItems}</List>
+            <List>
+              <GlistItems/>
+            </List>
             <Divider />
           </Drawer>
           <main className={classes.content}>
