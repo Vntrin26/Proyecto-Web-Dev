@@ -14,13 +14,14 @@ const InvestmentTable = ({id, description, amount, gain, type}) => {
         setType(typ);
       }, []);
 
+
     return (
 
     <tr >
-        <td><input value={desc}></input></td>
-        <td><input value={amt}></input></td>
-        <td><input value={gn}></input></td>
-        <td><input value={typ}></input></td>
+        <td><input value={desc} type="text" onChange={e => setDescription( e.target.value )}></input></td>
+        <td><input value={amt} type="text" onChange={e => setAmount( e.target.value )}></input></td>
+        <td><input value={gn} type="text" onChange={e => setGain( e.target.value )}></input></td>
+        <td><input value={typ} type="text" onChange={e => setType( e.target.value )}></input></td>
      </tr>
     );
 
