@@ -1,5 +1,6 @@
 import Auth from './Components/Auth/Auth'
 import useStyles from '../src/AppStyles';
+import {CloudWaveEffect} from 'react-background-animation'
 import Dashboard from './Components/Dashboard/Dashboard'
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import { useState } from 'react';
@@ -28,6 +29,7 @@ function App(props) {
           <Route exact path={"/portfolio"} component={Portfolio} />
           <Route path='/' render={props => ( 
           <div>
+            <CloudWaveEffect />
             <Auth logged={logged} loggedInStatus={loggedInStatus} />
           </div>
           )} />
