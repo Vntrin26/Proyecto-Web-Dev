@@ -1,23 +1,35 @@
 class ExpensesController < ApplicationController
-    before_action :find_id
+    before_action :find_id, only: [:show, :edit, :update, :destroy]
 
     def expense_params
-        params.require(:expense).permit(:category, :money, :description, :created_at)
+        params.require(:expense).permit(:budget_id, :category, :money, :description)
+    end
+
+    def new
+        @expense = expenses.build
+        render layout: false
     end
 
     def create
-        @budget = Budget.find(params[:budget_id])
-        @new_expense = @budget.expenses.build(expense_params)
+        expense = Expense.create!(
+            budget_id: params['expense']['budget_id'],
+            category: params['expense']['category'],
+            money: params['expense']['money'],
+            description: params['expense']['description']
 
-        if @new_expense.save
-            render json: @budget, status: 201
+        )
+        if expense
+            render json: {
+            status: :created,
+            expense: expense
+        }
         else
-            render json: { error: @new_expense.errors.full_messages }, status: 422
+            render json: { status: 500 }
         end
     end
 
     def show
-        render layout: false
+        render layout: expense
     end
 
     def edit
@@ -25,14 +37,33 @@ class ExpensesController < ApplicationController
     end
 
     def update
-        @expense = Expense.find(params[:id])
-        @expense.update(expense_params) ? (render :show, layout: false) : (render :edit, layout: false, status: 422)
+        expense = Expense.find_by(id: find_id) 
+        expense.update!(
+            category: params['expense']['category'],
+            money: params['expense']['money'],
+            description: params['expense']['description']
+        )
+        if expense
+            render json: {
+            status: :updated,
+            expense: expense
+        }
+        else
+            render json: { status: 500 }
+        end
     end
 
     def destroy
-        @expense = Expense.find(params[:id])
-        @expense.destroy
-        render json: @budget, status: 200
+        expense = Expense.find_by(id: find_id)
+        expense.destroy
+        if expense
+            render json: {
+            status: :deleted,
+            expense: expense
+        }
+        else
+            render json: { status: 500 }
+        end
     end
 
     def find_id

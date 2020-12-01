@@ -2,25 +2,26 @@ class IncomesController < ApplicationController
     before_action :find_id, only: [:show, :edit, :update, :destroy]
 
     def income_params
-        params.require(:investment).permit(:user_id, :category, :amount, :return_of_investment)
+        params.require(:income).permit(:budget_id, :category, :money, :description)
     end
 
     def new
-        @investment = investment.build
+        @income = incomes.build
         render layout: false
     end
 
     def create
-        investment = Investment.create!(
-            user_id: params['investment']['user_id'],
-            category: params['investment']['category'],
-            amount: params['investment']['amount'],
-            return_of_investment: params['investment']['return_of_investment']
+        income = Income.create!(
+            budget_id: params['income']['budget_id'],
+            category: params['income']['category'],
+            money: params['income']['money'],
+            description: params['income']['description']
+
         )
-        if investment
+        if income
             render json: {
             status: :created,
-            investment: investment
+            income: income
         }
         else
             render json: { status: 500 }
@@ -28,7 +29,7 @@ class IncomesController < ApplicationController
     end
 
     def show
-        render json: investment
+        render layout: income
     end
 
     def edit
@@ -36,17 +37,16 @@ class IncomesController < ApplicationController
     end
 
     def update
-        investment = investment.find_by(id: find_id) 
-        investment.update!(
-            user_id: params['investment']['user_id'],
-            category: params['investment']['category'],
-            amount: params['investment']['amount'],
-            return_of_investment: params['investment']['return_of_investment']
+        income = Income.find_by(id: find_id) 
+        income.update!(
+            category: params['income']['category'],
+            money: params['income']['money'],
+            description: params['income']['description']
         )
-        if investment
+        if income
             render json: {
             status: :updated,
-            investment: investment
+            income: income
         }
         else
             render json: { status: 500 }
@@ -54,12 +54,12 @@ class IncomesController < ApplicationController
     end
 
     def destroy
-        investment = investment.find_by(id: find_id)
-        investment.destroy
-        if investment
+        income = Income.find_by(id: find_id)
+        income.destroy
+        if income
             render json: {
             status: :deleted,
-            investment: investment
+            income: income
         }
         else
             render json: { status: 500 }
@@ -67,7 +67,6 @@ class IncomesController < ApplicationController
     end
 
     def find_id
-        @investment = investment.find(params[:id])
+        @income = Income.find(params[:id])
     end
-
 end
