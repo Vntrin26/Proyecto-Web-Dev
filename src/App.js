@@ -5,8 +5,9 @@ import Dashboard from './Components/Dashboard/Dashboard'
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import { useState } from 'react';
 import { data } from 'jquery';
+import Budget from './Components/Budget/Budget'
 
-function App() {
+function App(props) {
   const classes = useStyles()
   const [loggedInStatus, setloggedInStatus] = useState("NOT_LOGGED_IN");
   const [user, setuser] = useState({});
@@ -23,14 +24,16 @@ function App() {
           <Route path={"/dashboard"} render={props => (
             <Dashboard loggedInStatus={loggedInStatus} />
           )} />
-          <Route path='/' render={props => (
-        <div>
-          <CloudWaveEffect />
-          <Auth logged={logged} loggedInStatus={loggedInStatus} />
-        </div>
+          <Route exact path={'/budget'} component = {Budget}/>
+          <Route exact path={"/dashboard"} component={Dashboard} />
+          <Route path='/' render={props => ( 
+          <div>
+            <CloudWaveEffect />
+            <Auth logged={logged} loggedInStatus={loggedInStatus} />
+          </div>
           )} />
         </Switch>
-    </BrowserRouter>
+      </BrowserRouter>
     </div>
   );
 }
