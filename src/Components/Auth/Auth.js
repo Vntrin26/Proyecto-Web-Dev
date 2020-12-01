@@ -26,6 +26,31 @@ export default function SignIn(props) {
     history.push("/dashboard");
   }
 
+  const handleSubmit = (e) => {
+    const { email, password} = datos;
+
+    axios
+      .post(
+        "http://localhost:3001/registrations",
+        {
+          user: {
+            email: email,
+            password: password,
+          }
+        },
+        { withCredentials: true }
+      )
+      .then(response => {
+        if (response.data.status === 'created') {
+        handleSuccessfulAuth(response.data);
+        }
+      })
+      .catch(error => {
+        console.log("registration error", error);
+      });
+    e.preventDefault();
+  }
+
   const classes = useStyles();
 
   const handleChange = (e) =>{
@@ -125,33 +150,6 @@ export default function SignIn(props) {
         Nevermind, I have account
         </Button>
       </Grid>
-  }
-
-  
-
-  const handleSubmit = (e) => {
-    const { email, password} = datos;
-
-    axios
-      .post(
-        "http://localhost:3001/registrations",
-        {
-          user: {
-            email: email,
-            password: password,
-          }
-        },
-        { withCredentials: true }
-      )
-      .then(response => {
-        if (response.data.status === 'created') {
-        handleSuccessfulAuth(response.data);
-        }
-      })
-      .catch(error => {
-        console.log("registration error", error);
-      });
-    e.preventDefault();
   }
 
   return (
