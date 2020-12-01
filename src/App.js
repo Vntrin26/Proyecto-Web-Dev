@@ -4,6 +4,7 @@ import {CloudWaveEffect} from 'react-background-animation'
 import Dashboard from './Components/Dashboard/Dashboard'
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import Budget from './Components/Budget/Budget'
+import Portfolio from './Components/Portfolio/Portfolio';
 
 function App() {
   const classes = useStyles()
@@ -13,6 +14,7 @@ function App() {
         <Switch>
           <Route exact path={'budget'} component = {Budget}/>
           <Route exact path={"/dashboard"} component={Dashboard} />
+          <Route exact path={"/portfolio"} component={Portfolio} />
           <Route path='/auth' render={props =>
         <div>
           <CloudWaveEffect />
