@@ -1,342 +1,467 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useState} from 'react';
 import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import useStyles from '../Dashboard/DashboardStyles.js';
+import { ListItem, Dialog, CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, IconButton, Badge, Container, Grid, Paper, Link, Button, TextField, DialogTitle} from '@material-ui/core';
+import { MenuOutlined, ChevronLeft } from '@material-ui/icons';
+import GlistItems from '../Dashboard/ListItems/listItems';
+import InvestmentsG from '../Dashboard/InvestmentsG/InvestmentsG'
+import BGraph from './BGraph/BGraph'
+import Title from '../Dashboard/InvestmentsG/Title.js';
 
-function createData(description, quantity, category, date) {
-  return { description, quantity, category, date};
-}
 
-const rows = [
-  createData('Netflix', 170, 'Entretainment', '11/28/2020'),
-  createData('Drinks', 300, 'Friends', '03/04/2020'),
-  createData('Spotify', 50, 'Entretainment', '11/24/2020'),
-];
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-const headCells = [
-  { id: 'description', numeric: false, disablePadding: true, label: 'Description' },
-  { id: 'quantity', numeric: true, disablePadding: false, label: 'Quantity' },
-  { id: 'category', numeric: true, disablePadding: false, label: 'Category' },
-  { id: 'date', numeric: true, disablePadding: false, label: 'Date' },
-];
-
-function EnhancedTableHead(props) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-const useToolbarStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
-  title: {
-    flex: '1 1 100%',
-  },
-}));
-
-const EnhancedTableToolbar = (props) => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Expenses
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-  },
-  paper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
-  table: {
-    minWidth: 750,
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
-  },
-}));
-
-export default function EnhancedTable() {
+export default function Budget() {
   const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('quantity');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [extend, setExtend] = React.useState(true);
+  const handleDrawerExtend = () => {
+    setExtend(true);
+  };
+  const handleDrawerShrink = () => {
+    setExtend(false);
+  };
+  //combination of both styles
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+  const [movement, setMovement] = useState({
+    expense: [
+      { id: 1, description: 'Netflix', category: 'Entretainment', amount: 170, date: '10/07/2020' },
+      { id: 2, description: 'Drinks', category: 'Friends', amount: 300,  date: '03/08/2020' },
+    ],
+    income: [
+      { id: 1, description: 'Full Time Job', category: 'Job', amount: 20000, date: '10/03/2020' },
+      { id: 2, description: 'Book', category: 'Pasive', amount: 4000,  date: '24/08/2020' },
+    ]
+  })
+
+  const [params, setParams] = useState({
+    income: movement.income,
+    expense: movement.expense,
+    modUpdate: false,
+    modInsert: false,
+    form: {
+      id:'3',
+      description: '',
+      category: '',
+      amount: '',
+      date: '',
+    },
+    formi: {
+      id:'3',
+      description: '',
+      category: '',
+      amount: '',
+      date: '',
+    },
+  });
+
+  const showUpdate = (dato) =>{
+    setParams({...params,
+      form: dato,
+      modUpdate: true,
+    });
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
+  const closeUpdate = () => {
+    setParams({...params,
+      modUpdate: false,
+    });
+  };
+
+  const showInsert = () => {
+    setParams({...params,
+      modInsert: true,
+    });
+  };
+
+  const closeInsert = () => {
+    setParams({...params,
+      modInsert: false,
+    });
+  };
+
+  const edit = (dato) => {
+    var counter = 0;
+    var array = params.income;
+    array.map((conjunto) => {
+      if(dato.id === conjunto.id){
+        array[counter].description = dato.description;
+        array[counter].category = dato.category;
+        array[counter].amount = dato.amount;
+        array[counter].date = dato.date;
+      }
+      counter++;
+    });
+    setParams({...params, income: array, modUpdate: false});
+  };
+
+  const deleteinfo = (dato) => {
+    var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento "+ dato.id);
+    if (opcion === true) {
+      var counter = 0;
+      var array = params.income;
+      array.map((conjunto) => {
+        if (dato.id === conjunto.id) {
+          array.splice(counter, 1);
+        }
+        counter++;
+      });
+      setParams({...params, income: array, modUpdate: false });
     }
-    setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
+  const insertinfo= ()=>{
+    var newVal= {...params.form};
+    newVal.id=params.income.length+1;
+    var lista= params.income;
+    lista.push(newVal);
+    setParams({...params, modInsert: false, income: lista });
+  }
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
+  const handleChange = (e) => {
+    e.preventDefault();
+    setParams({
+      ...params,
+      form: {
+        ...params.form,
+        [e.target.name]: e.target.value,
+      },
+    });
   };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
-  const isSelected = (name) => selected.indexOf(name) !== -1;
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-            aria-label="enhanced table"
+      <CssBaseline />
+      <AppBar position="absolute" className={clsx(classes.appBar, extend && classes.appBarShift)}>
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerExtend}
+            className={clsx(classes.menuButton, extend && classes.menuButtonHidden)}
           >
-            <EnhancedTableHead
-              classes={classes}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+            <MenuOutlined />
+          </IconButton>
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            Portfolio
+              </Typography>
+          <IconButton color="inherit">
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !extend && classes.drawerPaperClose),
+        }}
+        extend={extend}
+      >
+        <div className={classes.toolbarIcon}>
+          <IconButton onClick={handleDrawerShrink}>
+            <ChevronLeft />
+          </IconButton>
+        </div>
+        <Divider />
+        <List><GlistItems/></List>
+        <Divider />
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={8} lg={8}>
+              <Paper className={fixedHeightPaper}>
+                <BGraph />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4} lg={4}>
+              <Paper className={fixedHeightPaper}>
+                <InvestmentsG />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={6} lg={6} container>
+                <Grid item xs = {6}>
+                  <Title>Expense</Title>
+                </Grid>
+                <Grid item xs = {6}>
+                  <Button
+                  fullWidth
+                  variant='contained'
+                  color= 'secondary'
+                  onClick = {()=>showInsert()}
+                  >
+                    Add Expense
+                  </Button>
+                </Grid>
+                <Grid item xs = {12}>
+                  <Paper className={fixedHeightPaper}>
+                    <table id='Portfolio'>
+                      <thead>
+                        <tr>
+                          <td>Description</td>
+                          <td>Category</td>
+                          <td>Amount</td>
+                          <td>Date</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {movement.expense.map((element) => (
+                          <tr>
+                            <td>{element.description}</td>
+                            <td>{element.category}</td>
+                            <td>{element.amount}</td>
+                            <td>{element.date}</td>
+                            <td>
+                              <Button 
+                              color = 'primary'
+                              onClick = {() => showUpdate(element)}
+                              > Edit</Button>
+                              <Button 
+                              color = 'danger'
+                              onClick = {() => deleteinfo(element)}
+                              > Delete</Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table> 
+                  </Paper>
+              </Grid>
+            </Grid>
+            <Grid item xs={12} md={6} lg={6} container>
+              <Grid item xs = {6}>
+                <Title>Income</Title>
+              </Grid>
+              <Grid item xs = {6}>
+                  <Button
+                  fullWidth
+                  variant='contained'
+                  color= 'secondary'
+                  onClick = {()=>showInsert()}
+                  >
+                    Add Income
+                  </Button>
+              </Grid>
+              <Grid item xs = {12}>
+                  <Paper className={fixedHeightPaper}>
+                    <table id='Portfolio'>
+                      <thead>
+                        <tr>
+                          <td>Description</td>
+                          <td>Category</td>
+                          <td>Amount</td>
+                          <td>Date</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {movement.income.map((element) => (
+                          <tr>
+                            <td>{element.description}</td>
+                            <td>{element.category}</td>
+                            <td>{element.amount}</td>
+                            <td>{element.date}</td>
+                            <td>
+                              <Button 
+                              color = 'primary'
+                              onClick = {() => showUpdate(element)}
+                              > Edit</Button>
+                              <Button 
+                              color = 'danger'
+                              onClick = {() => deleteinfo(element)}
+                              > Delete</Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </Paper>
+              </Grid>
+            </Grid>
+            <Grid container item xs={12} md={6} lg={6} spacing={1}>
+                
+            </Grid>
+          </Grid>
+          <Dialog open={params.modUpdate}>
+          <DialogTitle>
+           <div><h3>Edit Expense</h3></div>
+          </DialogTitle>
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.name}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.description}
-                      </TableCell>
-                      <TableCell align="right">{row.quantity}</TableCell>
-                      <TableCell align="right">{row.category}</TableCell>
-                      <TableCell align="right">{row.date}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+          <List>
+            <ListItem>
+              <label>
+               Id:
+              </label>
+            
+              <input
+                className="form-control"
+                readOnly
+                type="text"
+                value={params.form.id}
+              />
+            </ListItem>
+            
+            <ListItem>
+              <label>
+                Description:
+              </label>
+              <input
+                className="form-control"
+                name="description"
+                type="text"
+                onChange={handleChange}
+                value={params.form.description}
+              />
+            </ListItem>
+            
+            <ListItem>
+              <label>
+                Category: 
+              </label>
+              <input
+                className="form-control"
+                name="category"
+                type="text"
+                onChange={handleChange}
+                value={params.form.category}
+              />
+            </ListItem>
+
+            <ListItem>
+              <label>
+                Amount: 
+              </label>
+              <input
+                className="form-control"
+                name="amount"
+                type="text"
+                onChange={handleChange}
+                value={params.form.amount}
+              />
+            </ListItem>
+
+            <ListItem>
+              <label>
+                Date: 
+              </label>
+              <input
+                className="form-control"
+                name="date"
+                type="text"
+                onChange={handleChange}
+                value={params.form.date}
+              />
+            </ListItem>
+          </List>
+
+          <Grid>
+            <Button
+              color="primary"
+              onClick={() => edit(params.form)}
+            >
+              Edit
+            </Button>
+            <Button
+              color="danger"
+              onClick={() => closeUpdate()}
+            >
+              Cancelar
+            </Button>
+          </Grid>
+        </Dialog>
+
+
+
+        <Dialog open={params.modInsert}>
+          <DialogTitle>
+           <div><h3>Add Expense</h3></div>
+          </DialogTitle>
+
+          <List>
+            <ListItem>
+              <label>
+                Id: 
+              </label>
+              
+              <input
+                className="form-control"
+                readOnly
+                type="text"
+                value={params.income.length + 1}
+              />
+            </ListItem>
+            
+            <ListItem>
+              <label>
+                Description: 
+              </label>
+              <input
+                className="form-control"
+                name="description"
+                type="text"
+                onChange={handleChange}
+              />
+            </ListItem>
+            
+            <ListItem>
+              <label>
+                Category: 
+              </label>
+              <input
+                className="form-control"
+                name="category"
+                type="text"
+                onChange={handleChange}
+              />
+            </ListItem>
+
+            <ListItem>
+              <label>
+                Amount: 
+              </label>
+              <input
+                className="form-control"
+                name="amount"
+                type="text"
+                onChange={handleChange}
+              />
+            </ListItem>
+
+            <ListItem>
+              <label>
+                Date: 
+              </label>
+              <input
+                className="form-control"
+                name="date"
+                type="text"
+                onChange={handleChange}
+              />
+            </ListItem>
+          </List>
+
+          <Grid>
+            <Button
+              color="primary"
+              onClick={() => insertinfo()}
+            >
+              Insertar
+            </Button>
+            <Button
+              className="btn btn-danger"
+              onClick={() => closeInsert()}
+            >
+              Cancelar
+            </Button>
+          </Grid>
+        </Dialog>
+          <Box pt={4}>
+          </Box>
+        </Container>
+      </main>
     </div>
   );
 }
