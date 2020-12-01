@@ -21,18 +21,30 @@ export default function Budget() {
   //combination of both styles
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const [portfolio, setPortfolio] = useState({
-    investments: [
+  const [movement, setMovement] = useState({
+    expense: [
       { id: 1, description: 'Netflix', category: 'Entretainment', amount: 170, date: '10/07/2020' },
       { id: 2, description: 'Drinks', category: 'Friends', amount: 300,  date: '03/08/2020' },
+    ],
+    income: [
+      { id: 1, description: 'Full Time Job', category: 'Job', amount: 20000, date: '10/03/2020' },
+      { id: 2, description: 'Book', category: 'Pasive', amount: 4000,  date: '24/08/2020' },
     ]
   })
 
   const [params, setParams] = useState({
-    investments: portfolio.investments,
+    income: movement.income,
+    expense: movement.expense,
     modUpdate: false,
     modInsert: false,
     form: {
+      id:'3',
+      description: '',
+      category: '',
+      amount: '',
+      date: '',
+    },
+    formi: {
       id:'3',
       description: '',
       category: '',
@@ -68,7 +80,7 @@ export default function Budget() {
 
   const edit = (dato) => {
     var counter = 0;
-    var array = params.investments;
+    var array = params.income;
     array.map((conjunto) => {
       if(dato.id === conjunto.id){
         array[counter].description = dato.description;
@@ -78,30 +90,30 @@ export default function Budget() {
       }
       counter++;
     });
-    setParams({...params, investments: array, modUpdate: false});
+    setParams({...params, income: array, modUpdate: false});
   };
 
   const deleteinfo = (dato) => {
     var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento "+ dato.id);
     if (opcion === true) {
       var counter = 0;
-      var array = params.investments;
+      var array = params.income;
       array.map((conjunto) => {
         if (dato.id === conjunto.id) {
           array.splice(counter, 1);
         }
         counter++;
       });
-      setParams({...params, investments: array, modUpdate: false });
+      setParams({...params, income: array, modUpdate: false });
     }
   };
 
   const insertinfo= ()=>{
     var newVal= {...params.form};
-    newVal.id=params.investments.length+1;
-    var lista= params.investments;
+    newVal.id=params.income.length+1;
+    var lista= params.income;
     lista.push(newVal);
-    setParams({...params, modInsert: false, investments: lista });
+    setParams({...params, modInsert: false, income: lista });
   }
 
   const handleChange = (e) => {
@@ -197,7 +209,7 @@ export default function Budget() {
                         </tr>
                       </thead>
                       <tbody>
-                        {portfolio.investments.map((element) => (
+                        {movement.expense.map((element) => (
                           <tr>
                             <td>{element.description}</td>
                             <td>{element.category}</td>
@@ -207,7 +219,7 @@ export default function Budget() {
                               <Button 
                               color = 'primary'
                               onClick = {() => showUpdate(element)}
-                              > Editar</Button>
+                              > Edit</Button>
                               <Button 
                               color = 'danger'
                               onClick = {() => deleteinfo(element)}
@@ -246,7 +258,7 @@ export default function Budget() {
                         </tr>
                       </thead>
                       <tbody>
-                        {portfolio.investments.map((element) => (
+                        {movement.income.map((element) => (
                           <tr>
                             <td>{element.description}</td>
                             <td>{element.category}</td>
@@ -256,7 +268,7 @@ export default function Budget() {
                               <Button 
                               color = 'primary'
                               onClick = {() => showUpdate(element)}
-                              > Editar</Button>
+                              > Edit</Button>
                               <Button 
                               color = 'danger'
                               onClick = {() => deleteinfo(element)}
@@ -275,7 +287,7 @@ export default function Budget() {
           </Grid>
           <Dialog open={params.modUpdate}>
           <DialogTitle>
-           <div><h3>Editar Inversion</h3></div>
+           <div><h3>Edit Expense</h3></div>
           </DialogTitle>
 
           <List>
@@ -365,7 +377,7 @@ export default function Budget() {
 
         <Dialog open={params.modInsert}>
           <DialogTitle>
-           <div><h3>version</h3></div>
+           <div><h3>Add Expense</h3></div>
           </DialogTitle>
 
           <List>
@@ -378,7 +390,7 @@ export default function Budget() {
                 className="form-control"
                 readOnly
                 type="text"
-                value={params.investments.length + 1}
+                value={params.income.length + 1}
               />
             </ListItem>
             
