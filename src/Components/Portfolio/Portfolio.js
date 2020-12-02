@@ -415,7 +415,7 @@ const getInfo = (setPortfolio, setgraphData, setmoney) => {
   const url = runtimeEnv().REACT_APP_API_URL;
   axios
       .get(
-        url+"/investments",
+          "http://localhost:3001/investments",
         {
           
         },

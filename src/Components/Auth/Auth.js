@@ -32,7 +32,7 @@ export default function SignIn(props) {
     const url = runtimeEnv().REACT_APP_API_URL;
     axios
       .post(
-        url+"/registrations",
+        "http://localhost:3001/registrations",
         {
           user: {
             username: username,
@@ -59,7 +59,7 @@ export default function SignIn(props) {
 
     axios
       .post(
-        url+"/sessions",
+        "http://localhost:3001/sessions",
         {
           user: {
             email: email,

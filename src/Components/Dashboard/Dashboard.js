@@ -36,7 +36,7 @@ export default function Dashboard(props) {
   const handleLogoutClick = (e) => {
     const url = runtimeEnv().REACT_APP_API_URL;
     axios
-      .delete(url+"logout", { withCredentials: true })
+      .delete("http://localhost:3001/logout", { withCredentials: true })
       .then(response => {
         history.push("/");
       })
@@ -137,7 +137,7 @@ const getInfo = (setPortfolio, setgraphData, setmoney) => {
   const url = runtimeEnv().REACT_APP_API_URL;
   axios
       .get(
-        url+"/investments",
+        "http://localhost:3001/investments",
         {
           
         },
