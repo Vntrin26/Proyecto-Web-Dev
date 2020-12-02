@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 const ProtectedRoute = (props) => {
 
-    const Component = props.component;
+    const Component = props.children;
     const isAuthenticated = props.logged;
     
     return isAuthenticated ? (
