@@ -1,3 +1,10 @@
+## Para correrlo local
+Descargar la rama Back-final para poder correr el back de rails y la rama de react es Front_local
+
+### To run the rails server on local with react
+
+rails s -p 3001
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,7 +75,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-### To run the rails server 
-
-rails s -p 3001
