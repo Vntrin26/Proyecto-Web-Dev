@@ -1,3 +1,6 @@
+## Para correrlo local
+Descargar la rama Back-final para poder correr el back de rails y la rama de react es Front_local
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
