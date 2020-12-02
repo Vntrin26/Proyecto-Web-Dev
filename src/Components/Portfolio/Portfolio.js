@@ -6,6 +6,9 @@ import { MenuOutlined, ChevronLeft } from '@material-ui/icons';
 import GlistItems from '../Dashboard/ListItems/listItems';
 import InvestmentsG from '../Dashboard/InvestmentsG/InvestmentsG'
 import PGraph from './PGraph/PGraph';
+import axios from "axios";
+import { useEffect} from 'react';
+import runtimeEnv from '@mars/heroku-js-runtime-env'
 
 
 export default function Portfolio() {
@@ -20,17 +23,22 @@ export default function Portfolio() {
   //combination of both styles
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const [portfolio, setPortfolio] = useState({
+  const [portfolio, setPortfolio] = useState([])
+
+  const [money, setmoney] = useState([])
+  
+  const [graphData, setgraphData] = useState([])
+  /* {
     investments: [
       { id: 1, description: 'TSLA', category: 'stocks', amount: 20000, yield: 35 },
       { id: 2, description: 'Litecoin', category: 'crypto', amount: 19000,  yield: 40 },
       { id: 3, description: 'Oranges', category: 'fruit :v', amount: 16000,  yield: 5},
       { id: 4, description: 'VOO', category: 'ETFs', amount: 25000,  yield: 10 },
     ]
-  })
+  } */
 
   const [params, setParams] = useState({
-    investments: portfolio.investments,
+    investments: portfolio,
     modUpdate: false,
     modInsert: false,
     form: {
@@ -41,6 +49,8 @@ export default function Portfolio() {
       yield: '',
     },
   });
+
+  useEffect(()=>{getInfo(setPortfolio, setgraphData, setmoney)}, [])
 
   const showUpdate = (dato) =>{
     setParams({...params,
@@ -115,7 +125,7 @@ export default function Portfolio() {
       },
     });
   };
-  
+
 
   return (
     <div className={classes.root}>
@@ -160,12 +170,12 @@ export default function Portfolio() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={8}>
               <Paper className={fixedHeightPaper}>
-                <PGraph />
+                <PGraph dat = {graphData}/>
               </Paper>
             </Grid>
             <Grid item xs={12} md={4} lg={4}>
               <Paper className={fixedHeightPaper}>
-                <InvestmentsG />
+                <InvestmentsG data = {money} />
               </Paper>
             </Grid>
             <Grid item xs={12}>
@@ -184,7 +194,7 @@ export default function Portfolio() {
                     </tr>
                   </thead>
                   <tbody>
-                    {portfolio.investments.map((element) => (
+                    {portfolio.map((element) => (
                       <tr>
                         <td>{element.description}</td>
                         <td>{element.category}</td>
@@ -325,7 +335,7 @@ export default function Portfolio() {
                 className="form-control"
                 readOnly
                 type="text"
-                value={params.investments.length + 1}
+                value={portfolio.length + 1}
               />
             </ListItem>
             
@@ -400,3 +410,37 @@ export default function Portfolio() {
     </div>
   );
 }
+
+const getInfo = (setPortfolio, setgraphData, setmoney) => {
+  const url = runtimeEnv().REACT_APP_API_URL;
+  axios
+      .get(
+        url+"/investments",
+        {
+          
+        },
+        /* { withCredentials: true } */
+      )
+      .then(response => {
+        setPortfolio(response.data);
+
+        let dataArray = [];
+        let amountArray = [];
+
+        for (let i = 0; i < response.data.length; i++) {
+          let obj = {name: response.data[i].category, value: response.data[i].amount}
+          let amount = response.data[i].amount;
+          dataArray.push(obj); 
+          amountArray.push(amount);
+          console.log(dataArray);
+        }
+        setgraphData(dataArray);
+        setmoney(amountArray);
+        /* if (response.data.status === 'created') {
+        handleSuccessfulAuth(response.data);
+        } */
+      })
+      .catch(error => {
+        console.log("registration error", error);
+      });
+  }

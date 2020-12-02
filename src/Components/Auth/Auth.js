@@ -4,6 +4,7 @@ import {Button, CssBaseline, TextField, Grid, Typography, Container} from '@mate
 import {AccountBalanceWallet, Email, Lock, AccountCircle} from '@material-ui/icons';
 import useStyles from './AuthStyles'
 import { useHistory } from 'react-router-dom';
+import runtimeEnv from '@mars/heroku-js-runtime-env'
 
 
 export default function SignIn(props) {
@@ -28,10 +29,10 @@ export default function SignIn(props) {
 
   const handleSubmit = (e) => {
     const { username, email, password} = datos;
-
+    const url = runtimeEnv().REACT_APP_API_URL;
     axios
       .post(
-        "http://localhost:3001/registrations",
+        url+"/registrations",
         {
           user: {
             username: username,
@@ -54,10 +55,11 @@ export default function SignIn(props) {
 
   const handleLoggin = (e) => {
     const { email, password} = datos;
+    const url = runtimeEnv().REACT_APP_API_URL;
 
     axios
       .post(
-        "http://localhost:3001/sessions",
+        url+"/sessions",
         {
           user: {
             email: email,

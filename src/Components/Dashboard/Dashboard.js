@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import useStyles from './DashboardStyles.js';
 import {Button, CssBaseline, Drawer, Box, AppBar, Toolbar, List, Typography, Divider, IconButton, Badge, Container, Grid, Paper, Link} from '@material-ui/core';
@@ -7,7 +7,11 @@ import GlistItems from './ListItems/listItems';
 import InvestmentsG from './InvestmentsG/InvestmentsG'
 import BudgetG from './BudgetG/BudgetG'
 import PGraph from '../Portfolio/PGraph/PGraph';
-import BGraph from '../Budget/BGraph/BGraph'
+import BGraph from '../Budget/BGraph/BGraph';
+import axios from "axios";
+import {useEffect} from 'react';
+import { useHistory } from 'react-router-dom';
+import runtimeEnv from '@mars/heroku-js-runtime-env'
 
 
 export default function Dashboard(props) {
@@ -19,10 +23,32 @@ export default function Dashboard(props) {
     const handleDrawerShrink = () => {
         setExtend(false);
     };
+
+    let history = useHistory();
+
+
+  const [portfolio, setPortfolio] = useState([])
+
+  const [money, setmoney] = useState([])
+  
+  const [graphData, setgraphData] = useState([])
+
+  const handleLogoutClick = (e) => {
+    const url = runtimeEnv().REACT_APP_API_URL;
+    axios
+      .delete(url+"logout", { withCredentials: true })
+      .then(response => {
+        history.push("/");
+      })
+      .catch(error => {
+        console.log("logout error", error);
+      });
+  }
+
     //combination of both styles
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-
+    useEffect(()=>{getInfo(setPortfolio, setgraphData, setmoney)}, [])
 
     return (
         <div className={classes.root}>
@@ -42,6 +68,7 @@ export default function Dashboard(props) {
                 Dashboard
               </Typography>
               <Button
+              onClick = {handleLogoutClick}
               className = {classes.button}
               variant='contained'
               color="danger"
@@ -75,12 +102,12 @@ export default function Dashboard(props) {
               <Grid container spacing={3}>
                 <Grid item xs={12} md={8} lg={8}>
                   <Paper className={fixedHeightPaper}>
-                    <PGraph />
+                    <PGraph dat = {graphData} /> 
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={4} lg={4}>
                   <Paper className={fixedHeightPaper}>
-                    <InvestmentsG />
+                    <InvestmentsG data = {money}/>
                   </Paper>
                 </Grid>
                 <Grid item xs={12}>
@@ -105,3 +132,37 @@ export default function Dashboard(props) {
         </div>
     );
 }
+
+const getInfo = (setPortfolio, setgraphData, setmoney) => {
+  const url = runtimeEnv().REACT_APP_API_URL;
+  axios
+      .get(
+        url+"/investments",
+        {
+          
+        },
+        /* { withCredentials: true } */
+      )
+      .then(response => {
+        setPortfolio(response.data);
+
+        let dataArray = [];
+        let amountArray = [];
+
+        for (let i = 0; i < response.data.length; i++) {
+          let obj = {name: response.data[i].category, value: response.data[i].amount}
+          let amount = response.data[i].amount;
+          dataArray.push(obj); 
+          amountArray.push(amount);
+          console.log(dataArray);
+        }
+        setgraphData(dataArray);
+        setmoney(amountArray);
+        /* if (response.data.status === 'created') {
+        handleSuccessfulAuth(response.data);
+        } */
+      })
+      .catch(error => {
+        console.log("registration error", error);
+      });
+  }
