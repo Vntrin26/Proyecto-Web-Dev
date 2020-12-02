@@ -1,16 +1,18 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
-const ProtectedRoute = (props) => {
+class ProtectedRoute extends React.Component {
 
-    const Component = props.component;
-    const isAuthenticated = props.logged;
-    
-    return isAuthenticated ? (
-        <Component />
-    ) : (
-        <Redirect to={{ pathname: '/' }} />
-    );
+    render() {
+        const Component = this.props.component;
+        const isAuthenticated = true;
+       
+        return isAuthenticated ? (
+            <Component />
+        ) : (
+            <Redirect to={{ pathname: '/' }} />
+        );
+    }
 }
 
 export default ProtectedRoute;

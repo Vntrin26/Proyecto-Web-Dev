@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
+import Auth from './Components/Auth/Auth'
+import Dashboard from './Components/Dashboard/Dashboard'
+import {BrowserRouter, Switch, Route} from "react-router-dom";
+import Budget from './Components/Budget/Budget'
+import Portfolio from './Components/Portfolio/Portfolio';
+import ProtectedRoute from './Helpers/ProtectedRoute'
 
 const theme = createMuiTheme({
   palette: {
@@ -28,7 +31,14 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
     <MuiThemeProvider theme ={theme}>
-      <App />
+       <BrowserRouter>
+        <Switch>
+          <ProtectedRoute path={"/dashboard"} component = {Dashboard}/>
+          <ProtectedRoute path={'/budget'} component = {Budget}/>
+          <ProtectedRoute path={"/portfolio"} component={Portfolio} />
+          <Route exact = {true} path='/' component ={Auth}/>
+        </Switch>
+      </BrowserRouter>
     </MuiThemeProvider>,
   document.getElementById('root')
 );

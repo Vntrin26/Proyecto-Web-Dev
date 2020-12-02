@@ -27,11 +27,37 @@ export default function SignIn(props) {
   }
 
   const handleSubmit = (e) => {
-    const { email, password} = datos;
+    const { username, email, password} = datos;
 
     axios
       .post(
         "http://localhost:3001/registrations",
+        {
+          user: {
+            username: username,
+            email: email,
+            password: password,
+          }
+        },
+        { withCredentials: true }
+      )
+      .then(response => {
+        if (response.data.status === 'created') {
+        handleSuccessfulAuth(response.data);
+        }
+      })
+      .catch(error => {
+        console.log("registration error", error);
+      });
+    e.preventDefault();
+  }
+
+  const handleLoggin = (e) => {
+    const { email, password} = datos;
+
+    axios
+      .post(
+        "http://localhost:3001/sessions",
         {
           user: {
             email: email,
@@ -41,6 +67,7 @@ export default function SignIn(props) {
         { withCredentials: true }
       )
       .then(response => {
+        console.log("res from login", response)
         if (response.data.status === 'created') {
         handleSuccessfulAuth(response.data);
         }
@@ -90,6 +117,7 @@ export default function SignIn(props) {
   let login = 
   <Grid item xs = '6'>
     <Button
+    onClick = {handleLoggin}
     type="submit"
     fullWidth
     color="primary"
