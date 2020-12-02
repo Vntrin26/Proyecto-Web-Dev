@@ -68,9 +68,9 @@ export default function SignIn(props) {
       )
       .then(response => {
         console.log("res from login", response)
-        /* if (response.data.status === 'created') {
+        if (response.data.status === 'created') {
         handleSuccessfulAuth(response.data);
-        } */
+        }
       })
       .catch(error => {
         console.log("registration error", error);
