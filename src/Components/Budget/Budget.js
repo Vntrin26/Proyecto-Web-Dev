@@ -21,6 +21,7 @@ export default function Budget() {
   //combination of both styles
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const [formState, setFormState] = useState(0);
   const [movement, setMovement] = useState({
     expense: [
       { id: 1, description: 'Netflix', category: 'Entretainment', amount: 170, date: '10/07/2020' },
@@ -43,14 +44,7 @@ export default function Budget() {
       category: '',
       amount: '',
       date: '',
-    },
-    formi: {
-      id:'3',
-      description: '',
-      category: '',
-      amount: '',
-      date: '',
-    },
+    }
   });
 
   const showUpdate = (dato) =>{
@@ -80,7 +74,11 @@ export default function Budget() {
 
   const edit = (dato) => {
     var counter = 0;
+    if(formState == 1){
     var array = params.income;
+    } else {
+      var array = params.expense;
+    }
     array.map((conjunto) => {
       if(dato.id === conjunto.id){
         array[counter].description = dato.description;
@@ -90,7 +88,11 @@ export default function Budget() {
       }
       counter++;
     });
+    if(formState == 1){
     setParams({...params, income: array, modUpdate: false});
+    } else {
+      setParams({...params, expense: array, modUpdate: false});
+    }
   };
 
   const deleteinfo = (dato) => {
@@ -108,13 +110,7 @@ export default function Budget() {
     }
   };
 
-  const insertinfo= ()=>{
-    var newVal= {...params.form};
-    newVal.id=params.income.length+1;
-    var lista= params.income;
-    lista.push(newVal);
-    setParams({...params, modInsert: false, income: lista });
-  }
+
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -192,7 +188,10 @@ export default function Budget() {
                   fullWidth
                   variant='contained'
                   color= 'secondary'
-                  onClick = {()=>showInsert()}
+                  onClick = {()=> {
+                    //0 means expense, 1 means income
+                    setFormState(0);
+                    showInsert()}}
                   >
                     Add Expense
                   </Button>
@@ -218,7 +217,10 @@ export default function Budget() {
                             <td>
                               <Button 
                               color = 'primary'
-                              onClick = {() => showUpdate(element)}
+                              onClick = {()=> {
+                                //0 means expense, 1 means income
+                                setFormState(0);
+                                showUpdate(element)}}
                               > Edit</Button>
                               <Button 
                               color = 'danger'
@@ -241,7 +243,10 @@ export default function Budget() {
                   fullWidth
                   variant='contained'
                   color= 'secondary'
-                  onClick = {()=>showInsert()}
+                  onClick = {()=> {
+                    //0 means expense, 1 means income
+                    setFormState(1);
+                    showInsert()}}
                   >
                     Add Income
                   </Button>
@@ -267,7 +272,10 @@ export default function Budget() {
                             <td>
                               <Button 
                               color = 'primary'
-                              onClick = {() => showUpdate(element)}
+                              onClick = {()=> {
+                                //0 means expense, 1 means income
+                                setFormState(1);
+                                showUpdate(element)}}
                               > Edit</Button>
                               <Button 
                               color = 'danger'
@@ -287,7 +295,9 @@ export default function Budget() {
           </Grid>
           <Dialog open={params.modUpdate}>
           <DialogTitle>
-           <div><h3>Edit Expense</h3></div>
+           <div><h3>{
+                //0 means expense, 1 means income
+                formState === 1?'Edit Income':'Edit Expense'}</h3></div>
           </DialogTitle>
 
           <List>
@@ -377,7 +387,9 @@ export default function Budget() {
 
         <Dialog open={params.modInsert}>
           <DialogTitle>
-           <div><h3>Add Expense</h3></div>
+           <div><h3>{
+                //0 means expense, 1 means income
+                formState === 1?'Add Income':'Add Expense'}</h3></div>
           </DialogTitle>
 
           <List>
@@ -446,7 +458,10 @@ export default function Budget() {
           <Grid>
             <Button
               color="primary"
-              onClick={() => insertinfo()}
+              onClick={() => {
+                //0 means expense, 1 means income
+                formState === 1?insertinfo(params.form, params, setParams, formState):
+                insertinfo(params.form, params, setParams, formState)}}
             >
               Insertar
             </Button>
@@ -465,3 +480,21 @@ export default function Budget() {
     </div>
   );
 }
+
+
+  const insertinfo= (form, params, setParams, state)=>{
+    var newVal= {...form};
+    if(state == 1){
+    newVal.id=params.income.length+1;
+    var lista= params.income;
+    lista.push(newVal);
+    setParams({...params, modInsert: false, income: lista });
+    } else {
+    newVal.id=params.expense.length+1;
+    var lista2= params.expense;
+    lista2.push(newVal);
+    setParams({...params, modInsert: false, expense: lista2 });
+
+    }
+
+  }
