@@ -31,8 +31,13 @@ class InvestmentsController < ApplicationController
         end
     end
 
+    def index
+        @investments = Investment.all
+        render json: @investments
+    end
+
     def show
-        render json: investment
+        render json: @investment
     end
 
     def edit
