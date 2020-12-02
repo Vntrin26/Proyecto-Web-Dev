@@ -95,7 +95,7 @@ export default function Budget() {
     }
   };
 
-  const deleteinfo = (dato) => {
+  const deleteInfoIncome = (dato) => {
     var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento "+ dato.id);
     if (opcion === true) {
       var counter = 0;
@@ -107,8 +107,24 @@ export default function Budget() {
         counter++;
       });
       setParams({...params, income: array, modUpdate: false });
+      }
+    }
+  const deleteInfoExpense = (dato) => {
+    var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento "+ dato.id);
+    if (opcion === true) {
+      var counter = 0;
+        var array = params.expense;
+      array.map((conjunto) => {
+        if (dato.id === conjunto.id) {
+          array.splice(counter, 1);
+        }
+        counter++;
+      });
+        setParams({...params, expense: array, modUpdate: false });
     }
   };
+
+  
 
 
 
@@ -224,7 +240,9 @@ export default function Budget() {
                               > Edit</Button>
                               <Button 
                               color = 'danger'
-                              onClick = {() => deleteinfo(element)}
+                              onClick = {()=> 
+                                //0 means expense, 1 means income
+                                deleteInfoExpense(element)}
                               > Delete</Button>
                             </td>
                           </tr>
@@ -279,7 +297,9 @@ export default function Budget() {
                               > Edit</Button>
                               <Button 
                               color = 'danger'
-                              onClick = {() => deleteinfo(element)}
+                              onClick = {()=> 
+                                //0 means expense, 1 means income
+                                deleteInfoIncome(element)}
                               > Delete</Button>
                             </td>
                           </tr>
